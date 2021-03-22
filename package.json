@@ -1,0 +1,15 @@
+{
+  "name": "carbonara",
+  "version": "1.0.0",
+  "description": "A carbon footprint web component",
+  "repository": "git@github.com:digital4better/carbonara.git",
+  "author": "Stefan <stefan@digital4better.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsc --watch",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.3"
+  }
+}

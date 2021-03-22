@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "removeComments": true
+  },
+  "exclude": ["node_modules"]
+}
