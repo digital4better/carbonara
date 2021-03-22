@@ -39,14 +39,14 @@ const zones: {name: keyof typeof constants["co2-per-kwh"], test: RegExp}[] = [
 const template = document.createElement('template');
 template.innerHTML = `
 <style>
-    #carbonara { display: inline-block; position: relative; font-family: Verdana, sans-serif; font-size: 12px; }
+    #carbonara { display: inline-block; position: relative; }
     #carbonara:hover #tooltip { opacity: 1; transform: translateX(-50%) translateY(0)} 
-    #tooltip { pointer-events: none; font-weight: normal; transition: all 0.2s ease-in 0.3s; opacity: 0; padding: 10px; color: white; background: rgba(0,0,0,0.75); border-radius: 4px; position: absolute; transform: translateX(-50%) translateY(-5%); bottom: 24px; left: 25%; }
+    #tooltip { font-family: Verdana, sans-serif; font-size: 12px; text-align: left; pointer-events: none; font-weight: normal; transition: all 0.2s ease-in 0.3s; opacity: 0; padding: 10px; color: white; background: rgba(0,0,0,0.75); border-radius: 4px; position: absolute; transform: translateX(-50%) translateY(-5%); bottom: 24px; left: 25%; }
     #tooltip:after { content: ''; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 7px solid rgba(0,0,0,0.75); position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); }
     #tooltip.bottom {top: 24px; bottom: auto; transform: translateX(-50%) translateY(5%); }
     #tooltip.bottom:after {top:-7px; bottom: auto; border-top: none; border-bottom: 7px solid rgba(0,0,0,0.75);}
     #info { margin: 0; padding: 0; list-style: none; }
-    #reinsurance { margin: 8px 0 0; white-space: pre; }
+    #reinsurance { margin: 10px 0 0; white-space: pre; }
 </style>
 <div id="carbonara">
     <div id="tooltip">
