@@ -1,6 +1,6 @@
 {
   "name": "@digital4better/carbonara",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A carbon footprint web component",
   "repository": "git@github.com:digital4better/carbonara.git",
   "author": "Stefan <stefan@digital4better.com>",
