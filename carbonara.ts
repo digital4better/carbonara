@@ -71,8 +71,6 @@ class Carbonara extends HTMLElement {
     private timer: number;
     private persistance: string = "none";
 
-    public position: "top" | "bottom";
-
     constructor() {
         super();
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Paris";
