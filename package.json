@@ -1,5 +1,5 @@
 {
-  "name": "carbonara",
+  "name": "@digital4better/carbonara",
   "version": "1.0.0",
   "description": "A carbon footprint web component",
   "repository": "git@github.com:digital4better/carbonara.git",
@@ -11,5 +11,11 @@
   },
   "devDependencies": {
     "typescript": "^4.2.3"
-  }
+  },
+  "files": [
+    "dist/*",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
 }

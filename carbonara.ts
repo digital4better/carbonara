@@ -4,7 +4,7 @@ const constants = {
     "kwh-per-minute-mobile": 0.00011,
     "kwh-per-minute-desktop": 0.00032,
     "co2-per-kwh": {
-    "france": 34.8,
+        "france": 34.8,
         "europe": 276,
         "china": 681,
         "us": 493,
@@ -41,7 +41,7 @@ template.innerHTML = `
 <style>
     #carbonara { display: inline-block; position: relative; font-family: Verdana, sans-serif; font-size: 12px; }
     #carbonara:hover #tooltip { opacity: 1; transform: translateX(-50%) translateY(0)} 
-    #tooltip { pointer-events: none; transition: all 0.2s ease-in 0.3s; opacity: 0; padding: 10px; color: white; background: rgba(0,0,0,0.75); border-radius: 4px; position: absolute; transform: translateX(-50%) translateY(-5%); bottom: 24px; left: 25%; }
+    #tooltip { pointer-events: none; font-weight: normal; transition: all 0.2s ease-in 0.3s; opacity: 0; padding: 10px; color: white; background: rgba(0,0,0,0.75); border-radius: 4px; position: absolute; transform: translateX(-50%) translateY(-5%); bottom: 24px; left: 25%; }
     #tooltip:after { content: ''; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 7px solid rgba(0,0,0,0.75); position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); }
     #tooltip.bottom {top: 24px; bottom: auto; transform: translateX(-50%) translateY(5%); }
     #tooltip.bottom:after {top:-7px; bottom: auto; border-top: none; border-bottom: 7px solid rgba(0,0,0,0.75);}
@@ -69,6 +69,7 @@ class Carbonara extends HTMLElement {
     private duration = 0;
     private frequency = 200;
     private timer: number;
+    private persistance: string = "none";
 
     public position: "top" | "bottom";
 
@@ -78,8 +79,7 @@ class Carbonara extends HTMLElement {
         this.zone = zones.find(zone => zone.test.test(timeZone))?.name || "world";
         this.language = /^fr\b/.test(navigator.language) ? "fr" : "en";
         this.mobile = /Mobi|Android/i.test(navigator.userAgent);
-        const shadow = this.attachShadow({mode: 'open'});
-        shadow.appendChild(template.content.cloneNode(true));
+        this.attachShadow({mode: 'open'}).appendChild(template.content.cloneNode(true));
     }
 
     static get observedAttributes() {
@@ -98,6 +98,9 @@ class Carbonara extends HTMLElement {
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (name === "position") {
             this.shadowRoot.getElementById("tooltip").className = newValue;
+        }
+        if (name === "persistance") {
+            this.persistance = newValue;
         }
     }
 
