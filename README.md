@@ -6,7 +6,6 @@ This is a custom element to compute web navigation carbon footprint.
 ### CDN
 
 ```html
-<!-- pin to a specific version if required -->
 <script type="module" src="https://unpkg.com/@digital4better/carbonara@latest/dist/carbonara.js"></script>
  
 <p>Your navigation has emitted <carbon-ara></carbon-ara> so far.</p>

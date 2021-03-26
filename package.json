@@ -1,8 +1,11 @@
 {
   "name": "@digital4better/carbonara",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A carbon footprint web component",
-  "repository": "git@github.com:digital4better/carbonara.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digital4better/carbonara.git"
+  },
   "author": "Stefan <stefan@digital4better.com>",
   "license": "MIT",
   "scripts": {
