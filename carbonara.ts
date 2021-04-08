@@ -36,6 +36,11 @@ const zones: {name: keyof typeof constants["co2-per-kwh"], test: RegExp}[] = [
     { name: "us", test: /America\/(Adak|Anchorage|Boise|Chicago|Denver|Detroit|Indiana|Juneau|Kentucky|Los_Angeles|Menominee|Metlakatla|New_York|Nome|Phoenix|Sitka|Yakutat)/i }
 ];
 
+const stores: {[key: string]: Storage} = {
+    session: sessionStorage,
+    local: localStorage,
+}
+
 const template = document.createElement('template');
 template.innerHTML = `
 <style>
@@ -66,10 +71,11 @@ class Carbonara extends HTMLElement {
     private readonly zone: keyof typeof constants["co2-per-kwh"];
     private readonly language: "en" | "fr";
 
+    private transfer = 0;
     private duration = 0;
-    private frequency = 200;
+    private frequency = 500;
     private timer: number;
-    private persistance: string = "none";
+    private store: Storage;
 
     constructor() {
         super();
@@ -81,7 +87,7 @@ class Carbonara extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ["position"];
+        return ["persistance", "position"];
     }
 
     connectedCallback() {
@@ -98,7 +104,13 @@ class Carbonara extends HTMLElement {
             this.shadowRoot.getElementById("tooltip").className = newValue;
         }
         if (name === "persistance") {
-            this.persistance = newValue;
+            this.store = stores[newValue];
+            const data = JSON.parse(this.store?.getItem("carbonara"));
+            if (data) {
+                const {transfer, duration} = data;
+                this.transfer = transfer;
+                this.duration = duration;
+            }
         }
     }
 
@@ -106,17 +118,18 @@ class Carbonara extends HTMLElement {
         if (document.visibilityState !== "hidden") {
             this.duration += this.frequency / 60 / 1000;
         }
-        const transferSize = performance ? performance.getEntries().reduce((acc, cur) => acc + ((cur as any).transferSize || 0), 0) : 0;
-        const kWhDataCenter = transferSize * constants["kwh-per-byte-datacenter"] * constants["co2-per-kwh"][this.zone];
-        const kWhNetwork = transferSize * constants["kwh-per-byte-network"] * constants["co2-per-kwh"][this.zone];
+        const transfer = this.transfer + (performance ? performance.getEntries().reduce((acc, cur) => acc + ((cur as any).transferSize || 0), 0) : 0);
+        const kWhDataCenter = transfer * constants["kwh-per-byte-datacenter"] * constants["co2-per-kwh"][this.zone];
+        const kWhNetwork = transfer * constants["kwh-per-byte-network"] * constants["co2-per-kwh"][this.zone];
         const kWhDevice = this.duration * (this.mobile ? constants["kwh-per-minute-mobile"] : constants["kwh-per-minute-desktop"]) * constants["co2-per-kwh"][this.zone];
         const carbon = kWhDataCenter + kWhNetwork + kWhDevice;
         this.shadowRoot.getElementById("device").textContent = `${i18n[this.language].device} ${this.mobile ? "mobile" : "desktop"}`;
         this.shadowRoot.getElementById("zone").textContent = `${i18n[this.language].zone} ${this.zone}`;
-        this.shadowRoot.getElementById("transfer").textContent = `${i18n[this.language].transfer} ${Math.round(transferSize / 1024)} ko`;
+        this.shadowRoot.getElementById("transfer").textContent = `${i18n[this.language].transfer} ${Math.round(transfer / 1024)} ko`;
         this.shadowRoot.getElementById("duration").textContent = `${i18n[this.language].duration} ${Math.round(this.duration * 60)} s`;
         this.shadowRoot.getElementById("reinsurance").textContent = `${i18n[this.language].reinsurance}`;
-        this.shadowRoot.getElementById("carbon").textContent = `${carbon.toFixed(3)} gCO2e`;
+        this.shadowRoot.getElementById("carbon").textContent = `${Intl.NumberFormat([],{maximumFractionDigits: 3}).format(carbon)} gCO2e`;
+        this.store?.setItem("carbonara", JSON.stringify({transfer, duration: this.duration}));
     }
 }
 customElements.define('carbon-ara', Carbonara);
