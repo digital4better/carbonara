@@ -73,7 +73,7 @@ class Carbonara extends HTMLElement {
 
     private transfer = 0;
     private duration = 0;
-    private frequency = 500;
+    private frequency = 200;
     private timer: number;
     private store: Storage;
 
@@ -125,10 +125,10 @@ class Carbonara extends HTMLElement {
         const carbon = kWhDataCenter + kWhNetwork + kWhDevice;
         this.shadowRoot.getElementById("device").textContent = `${i18n[this.language].device} ${this.mobile ? "mobile" : "desktop"}`;
         this.shadowRoot.getElementById("zone").textContent = `${i18n[this.language].zone} ${this.zone}`;
-        this.shadowRoot.getElementById("transfer").textContent = `${i18n[this.language].transfer} ${Math.round(transfer / 1024)} ko`;
-        this.shadowRoot.getElementById("duration").textContent = `${i18n[this.language].duration} ${Math.round(this.duration * 60)} s`;
+        this.shadowRoot.getElementById("transfer").textContent = `${i18n[this.language].transfer} ${Intl.NumberFormat().format(Math.round(transfer / 1024))} ko`;
+        this.shadowRoot.getElementById("duration").textContent = `${i18n[this.language].duration} ${Intl.NumberFormat().format(Math.round(this.duration * 60))} s`;
         this.shadowRoot.getElementById("reinsurance").textContent = `${i18n[this.language].reinsurance}`;
-        this.shadowRoot.getElementById("carbon").textContent = `${Intl.NumberFormat([],{maximumFractionDigits: 3}).format(carbon)} gCO2e`;
+        this.shadowRoot.getElementById("carbon").textContent = `${Intl.NumberFormat([],{ minimumFractionDigits: 3, maximumFractionDigits: 3}).format(carbon)} gCO2e`;
         this.store?.setItem("carbonara", JSON.stringify({transfer, duration: this.duration}));
     }
 }
